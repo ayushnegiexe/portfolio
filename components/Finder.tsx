@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, JSX } from "react";
 import Window from "@/components/Window";
 
 interface FinderProps {
