@@ -13,6 +13,7 @@ import ResumeAnalyzerPage from "@/app/projects/resume-analyzer/page";
 import TicketAssistantPage from "@/app/projects/ticket-assistant/page";
 import LexicalAnalyzerPage from "@/app/projects/lexical-analyzer/page";
 import SkillsPage from "@/app/skills/page";
+import type {JSX} from "react";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [active, setActive] = useState<string | null>(null);
