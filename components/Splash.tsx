@@ -20,7 +20,7 @@ export default function Splash() {
       <div className="relative">
         <div className="absolute inset-0 bg-white/20 rounded-full blur-3xl scale-150" />
         <Image
-          src="/appleLogo.png"
+          src="/appleLogo.jpg"
           alt="Portfolio Logo"
           width={180}
           height={180}
