@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { JSX } from "react";
+
 import Window from "@/components/Window";
 import FileIcon from "@/components/FileIcon";
 
