@@ -36,10 +36,10 @@ export default function Window({ title, children, onClose }: WindowProps) {
           />
           {/* Minimize */}
           <span
-            className="w-3 h-3 bg-yellow-500 rounded-full cursor-pointer"
-            onClick={() => setIsMinimized((prev) => !prev)}
-            aria-label="Minimize window"
-          />
+  className="w-3 h-3 bg-yellow-500 rounded-full cursor-pointer"
+  onClick={() => onClose?.()}   // closes instead of toggling minimize
+  aria-label="Minimize window"
+/>
           {/* Maximize */}
           <span
             className="w-3 h-3 bg-green-500 rounded-full cursor-pointer"
