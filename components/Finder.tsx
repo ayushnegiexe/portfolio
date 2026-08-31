@@ -5,6 +5,11 @@ import type { JSX } from "react";
 
 import Window from "@/components/Window";
 import FileIcon from "@/components/FileIcon";
+import ResumePage from "@/app/resume/page"; 
+import DevsheelPage from "@/app/projects/devsheel/page";
+import ResumeAnalyzerPage from "@/app/projects/resume-analyzer/page";
+import TicketAssistantPage from "@/app/projects/ticket-assistant/page";
+import LexicalAnalyzerPage from "@/app/projects/lexical-analyzer/page";
 
 interface FinderProps {
   active: string | null;
@@ -18,6 +23,7 @@ export default function Finder({ active, onClose }: FinderProps) {
   useEffect(() => setMounted(true), []);
   if (!mounted || !active) return null;
 
+  // 1️⃣ Folder windows (what icons show inside each folder)
   const windows: Record<string, JSX.Element> = {
     Resume: (
       <div className="grid grid-cols-4 gap-4 p-4">
@@ -30,82 +36,41 @@ export default function Finder({ active, onClose }: FinderProps) {
     ),
     Projects: (
       <div className="grid grid-cols-4 gap-4 p-4">
-        <FileIcon
-          name="Project1.js"
-          type="code"
-          onOpen={() => setOpenedFiles((prev) => [...prev, "Project1.js"])}
-        />
-        <FileIcon
-          name="Project2.js"
-          type="code"
-          onOpen={() => setOpenedFiles((prev) => [...prev, "Project2.js"])}
-        />
-        <FileIcon
-          name="Portfolio.png"
-          type="image"
-          onOpen={() => setOpenedFiles((prev) => [...prev, "Portfolio.png"])}
-        />
+        {/* Project FileIcons here */}
       </div>
     ),
-    Skills: (
-      <div className="grid grid-cols-4 gap-4 p-4">
-        <FileIcon
-          name="Skills.txt"
-          type="text"
-          onOpen={() => setOpenedFiles((prev) => [...prev, "Skills.txt"])}
-        />
-      </div>
-    ),
-    "About Me": <p>About me content here</p>,
-    Contact: <p>Contact form or info here</p>,
-    "Download Resume": <p>Download link or PDF here</p>,
-    "Portfolio Guide": <p>Guide content here</p>,
+    // other folders...
   };
 
-  const fileContents: Record<string, JSX.Element> = {
-    "Resume.pdf": (
-      <div className="p-4 text-sm text-black bg-white rounded-md">
-        <h2 className="font-bold mb-2">Ayush — Resume</h2>
-        <ul className="list-disc list-inside">
-          <li>Software Engineer at Apple</li>
-          <li>Full‑stack developer (React, Node.js, TypeScript)</li>
-          <li>Advanced in C, JavaScript, Algorithm design</li>
-          <li>Experience with NextAuth, Jest, OAuth debugging</li>
-        </ul>
-      </div>
-    ),
-    "Project1.js": (
-      <pre className="p-4 text-xs bg-black text-green-400 rounded-md overflow-auto">
-{`function helloWorld() {
-  console.log("Hello, world!");
-}`}
-      </pre>
-    ),
-    "Project2.js": (
-      <pre className="p-4 text-xs bg-black text-green-400 rounded-md overflow-auto">
-{`export default function Portfolio() {
-  return <div>My Portfolio Project</div>;
-}`}
-      </pre>
-    ),
-    "Portfolio.png": (
-      <div className="p-4">
-        <p className="text-sm text-black">Image preview placeholder for Portfolio.png</p>
-      </div>
-    ),
-    "Skills.txt": (
-      <div className="p-4 text-sm text-black bg-white rounded-md">
-        <p>Skills:</p>
-        <ul className="list-disc list-inside">
-          <li>React.js, Next.js</li>
-          <li>Node.js, TypeScript</li>
-          <li>Algorithmic problem solving</li>
-          <li>Frontend UI/UX design</li>
-        </ul>
-      </div>
-    ),
-  };
+const fileContents: Record<string, JSX.Element> = {
+ "Resume.pdf": (
+  <div className="p-4 h-[80vh] flex flex-col gap-4">
+    <iframe
+      src="/resume.pdf"
+      className="w-full flex-1 border rounded-md shadow-sm"
+    />
 
+    <div className="flex justify-end">
+      <a
+        href="/resume.pdf"
+        download
+        className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-300 transition"
+      >
+        ⬇️ Download
+      </a>
+    </div>
+  </div>
+),
+
+
+
+  "Project1.js": <DevsheelPage />,
+  "Project2.js": <ResumeAnalyzerPage />,
+  "Portfolio.png": <TicketAssistantPage />,
+  "Skills.txt": <LexicalAnalyzerPage />,
+};
+
+  // 3️⃣ Rendering Finder UI
   return (
     <div className="absolute inset-0 pointer-events-none z-30">
       {/* Finder window */}
