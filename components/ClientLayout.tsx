@@ -7,7 +7,6 @@ import MenuBar from "@/components/MenuBar";
 import StatusBar from "@/components/StatusBar";
 import Window from "@/components/Window";
 
-import ResumePage from "@/app/resume/page"; 
 import DevsheelPage from "@/app/projects/devsheel/page";
 import ResumeAnalyzerPage from "@/app/projects/resume-analyzer/page";
 import TicketAssistantPage from "@/app/projects/ticket-assistant/page";
@@ -18,8 +17,25 @@ import type {JSX} from "react";
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [active, setActive] = useState<string | null>(null);
 
+  // Sections (folders)
   const sections: Record<string, JSX.Element> = {
-    Resume: <ResumePage />,
+    Resume: (
+      <div className="p-4 h-[80vh] flex flex-col gap-4">
+        <iframe
+          src="/resume.pdf"
+          className="w-full flex-1 border rounded-md shadow-sm"
+        />
+        <div className="flex justify-end">
+          <a
+            href="/resume.pdf"
+            download
+            className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-300 transition"
+          >
+            ⬇️ Download
+          </a>
+        </div>
+      </div>
+    ),
     Projects: (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
         <ProjectCard title="Devsheel" description="Portfolio website showcasing developer projects and skills." onOpen={() => setActive("Devsheel")} />
@@ -31,6 +47,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     Skills: <SkillsPage />,
   };
 
+  // File contents
   const fileContents: Record<string, JSX.Element> = {
     Devsheel: <DevsheelPage />,
     ResumeAnalyzer: <ResumeAnalyzerPage />,
@@ -60,6 +77,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   );
 }
 
+/* Project Card Helper */
 function ProjectCard({
   title,
   description,
