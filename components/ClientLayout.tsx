@@ -24,7 +24,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       </div>
 
       {/* Finder windows */}
-      <Finder active={active} onClose={() => setActive(null)} />
+      <Finder />
+
 
       {/* Page content */}
       {children}
