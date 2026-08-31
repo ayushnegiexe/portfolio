@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function ResumePage() {
   return (
-    <main className="h-screen">
+    <main className="h-screen bg-transparent">
       <Window title="Resume">
         <div className="divide-y divide-gray-200">
           {/* Profile */}

@@ -2,7 +2,7 @@ import Window from "@/components/Window";
 
 export default function Home() {
   return (
-    <main className="h-screen">
+    <main className="h-screen bg-transparent">
       <Window title="Resume">
         <p>
           Software Engineer at Apple. Skilled in React, Next.js, Tailwind, OAuth, and algorithm design.

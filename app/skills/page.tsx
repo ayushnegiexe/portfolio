@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function SkillsPage() {
   return (
-    <main className="h-screen">
+    <main className="h-screen bg-transparent">
       <Window title="Skills">
         <div className="grid grid-cols-3 gap-6 p-4">
           <Image src="/react.png" alt="React" width={48} height={48} />

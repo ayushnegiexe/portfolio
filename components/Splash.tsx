@@ -16,14 +16,17 @@ export default function Splash() {
   if (!mounted || !loading) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 transition-opacity duration-500 opacity-100">
-      <Image
-        src="/appleLogo.png"
-        alt="Portfolio Logo"
-        width={120}
-        height={120}
-        className="animate-pulse"
-      />
+    <div className="fixed inset-0 flex items-center justify-center bg-black z-50 transition-opacity duration-500 opacity-100">
+      <div className="relative">
+        <div className="absolute inset-0 bg-white/20 rounded-full blur-3xl scale-150" />
+        <Image
+          src="/appleLogo.png"
+          alt="Portfolio Logo"
+          width={180}
+          height={180}
+          className="animate-pulse relative z-10"
+        />
+      </div>
     </div>
   );
 }
