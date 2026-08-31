@@ -11,14 +11,26 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const [active, setActive] = useState<string | null>(null);
 
   return (
-    <>
+    <div className="relative h-screen w-screen bg-black text-white">
+      {/* Splash always visible at start */}
       <Splash />
-      <MenuBar onOpen={setActive} />
-<StatusBar />   {/* no onSpotlight prop */}
-<Finder active={active} onClose={() => setActive(null)} />
-{children}
-<Dock onOpen={setActive} />
 
-    </>
+      {/* Menu bar at top */}
+      <MenuBar onOpen={setActive} />
+
+      {/* Status bar fixed to top-right */}
+      <div className="fixed top-2 right-4 z-50">
+        <StatusBar />
+      </div>
+
+      {/* Finder windows */}
+      <Finder active={active} onClose={() => setActive(null)} />
+
+      {/* Page content */}
+      {children}
+
+      {/* Dock at bottom */}
+      <Dock onOpen={setActive} />
+    </div>
   );
 }
