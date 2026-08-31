@@ -1,3 +1,5 @@
+"use client";
+
 import Window from "@/components/Window";
 import Image from "next/image";
 
@@ -7,18 +9,21 @@ const projects = [
     alt: "Portfolio",
     title: "MacOS Portfolio",
     description: "Interactive portfolio styled like macOS.",
+    link: "https://github.com/yourusername/macos-portfolio",
   },
   {
     icon: "/icons/college.png",
     alt: "College App",
     title: "College Discovery App",
     description: "Helps students explore universities with filters.",
+    link: "https://github.com/yourusername/college-app",
   },
   {
     icon: "/icons/algorithm.png",
     alt: "Algorithm",
     title: "Algorithm Optimizer",
     description: "Efficient solutions for subarray sum problems.",
+    link: "https://github.com/yourusername/algorithm-optimizer",
   },
 ];
 
@@ -26,13 +31,30 @@ export default function ProjectsPage() {
   return (
     <main className="h-screen bg-transparent">
       <Window title="Projects">
-        <div className="divide-y divide-gray-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
           {projects.map((proj) => (
-            <div key={proj.title} className="flex items-center gap-3 py-3">
-              <Image src={proj.icon} alt={proj.alt} width={32} height={32} />
-              <div>
-                <p className="font-semibold">{proj.title}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{proj.description}</p>
+            <div
+              key={proj.title}
+              className="rounded-lg border bg-white dark:bg-zinc-900 shadow-md hover:shadow-lg transition p-6 flex flex-col justify-between"
+            >
+              <div className="flex items-center gap-4">
+                <Image src={proj.icon} alt={proj.alt} width={48} height={48} />
+                <div>
+                  <h2 className="text-lg font-semibold">{proj.title}</h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    {proj.description}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 flex justify-end">
+                <a
+                  href={proj.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition"
+                >
+                  🔗 View Project
+                </a>
               </div>
             </div>
           ))}

@@ -1,128 +1,135 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import type { JSX } from "react";
-
+import { useState } from "react";
 import Window from "@/components/Window";
-import FileIcon from "@/components/FileIcon";
 import ResumePage from "@/app/resume/page"; 
 import DevsheelPage from "@/app/projects/devsheel/page";
 import ResumeAnalyzerPage from "@/app/projects/resume-analyzer/page";
 import TicketAssistantPage from "@/app/projects/ticket-assistant/page";
 import LexicalAnalyzerPage from "@/app/projects/lexical-analyzer/page";
 import SkillsPage from "@/app/skills/page";
+import { FileText, FolderOpen, Wrench } from "lucide-react"; 
+import type { JSX } from "react";
 
+export default function Finder() {
+  const [active, setActive] = useState("Resume");
+  const [openedFile, setOpenedFile] = useState<string | null>(null);
 
-interface FinderProps {
-  active: string | null;
-  onClose: () => void;
+  // Sections for sidebar navigation
+  const sections: Record<string, JSX.Element> = {
+    Resume: (
+      <div className="p-4 h-[80vh] flex flex-col gap-4">
+        <ResumePage />
+      </div>
+    ),
+    Projects: (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+        {/* Each project card */}
+        <ProjectCard
+          title="Devsheel"
+          description="Portfolio website showcasing developer projects and skills."
+          onOpen={() => setOpenedFile("Devsheel")}
+        />
+        <ProjectCard
+          title="Resume Analyzer"
+          description="AI-powered tool to analyze resumes and provide insights."
+          onOpen={() => setOpenedFile("ResumeAnalyzer")}
+        />
+        <ProjectCard
+          title="Ticket Assistant"
+          description="Smart assistant for managing support tickets efficiently."
+          onOpen={() => setOpenedFile("TicketAssistant")}
+        />
+        <ProjectCard
+          title="Lexical Analyzer"
+          description="Compiler design project using Lex and C for tokenization."
+          onOpen={() => setOpenedFile("LexicalAnalyzer")}
+        />
+      </div>
+    ),
+    Skills: <SkillsPage />,
+  };
+
+  // File contents (single window mode)
+  const fileContents: Record<string, JSX.Element> = {
+    Devsheel: <DevsheelPage />,
+    ResumeAnalyzer: <ResumeAnalyzerPage />,
+    TicketAssistant: <TicketAssistantPage />,
+    LexicalAnalyzer: <LexicalAnalyzerPage />,
+  };
+
+  return (
+    <main className="h-screen bg-transparent flex">
+      {/* Sidebar */}
+      <aside className="w-56 bg-gray-100 dark:bg-zinc-900 border-r p-6 space-y-4">
+        <button
+          onClick={() => { setActive("Resume"); setOpenedFile(null); }}
+          className={`flex items-center gap-2 w-full px-3 py-2 rounded-md text-sm font-medium transition 
+            ${active === "Resume" ? "bg-blue-600 text-white" : "hover:bg-gray-200 dark:hover:bg-zinc-800"}`}
+        >
+          <FileText className="w-4 h-4" /> Resume
+        </button>
+        <button
+          onClick={() => { setActive("Projects"); setOpenedFile(null); }}
+          className={`flex items-center gap-2 w-full px-3 py-2 rounded-md text-sm font-medium transition 
+            ${active === "Projects" ? "bg-blue-600 text-white" : "hover:bg-gray-200 dark:hover:bg-zinc-800"}`}
+        >
+          <FolderOpen className="w-4 h-4" /> Projects
+        </button>
+        <button
+          onClick={() => { setActive("Skills"); setOpenedFile(null); }}
+          className={`flex items-center gap-2 w-full px-3 py-2 rounded-md text-sm font-medium transition 
+            ${active === "Skills" ? "bg-blue-600 text-white" : "hover:bg-gray-200 dark:hover:bg-zinc-800"}`}
+        >
+          <Wrench className="w-4 h-4" /> Skills
+        </button>
+      </aside>
+
+      {/* Content Pane */}
+      <div className="flex-1 p-6 overflow-y-auto">
+        {/* Show folder window only if no file is opened */}
+        {!openedFile ? (
+          <Window title={active}>
+            {sections[active]}
+          </Window>
+        ) : (
+          <Window title={openedFile} onClose={() => setOpenedFile(null)}>
+            {fileContents[openedFile]}
+          </Window>
+        )}
+      </div>
+    </main>
+  );
 }
 
-export default function Finder({ active, onClose }: FinderProps) {
-  const [mounted, setMounted] = useState(false);
-  const [openedFiles, setOpenedFiles] = useState<string[]>([]);
-
-  useEffect(() => setMounted(true), []);
-  if (!mounted || !active) return null;
-
-  // 1️⃣ Folder windows (what icons show inside each folder)
-const windows: Record<string, JSX.Element> = {
-  Resume: (
-    <div className="grid grid-cols-4 gap-4 p-4">
-      <FileIcon
-        name="Resume.pdf"
-        type="pdf"
-        onOpen={() => setOpenedFiles((prev) => [...prev, "Resume.pdf"])}
-      />
-    </div>
-  ),
-  Projects: (
-    <div className="grid grid-cols-4 gap-4 p-4">
-      <FileIcon
-        name="Project1.js"
-        type="code"
-        onOpen={() => setOpenedFiles((prev) => [...prev, "Project1.js"])}
-      />
-      <FileIcon
-        name="Project2.js"
-        type="code"
-        onOpen={() => setOpenedFiles((prev) => [...prev, "Project2.js"])}
-      />
-      <FileIcon
-        name="Portfolio.png"
-        type="image"
-        onOpen={() => setOpenedFiles((prev) => [...prev, "Portfolio.png"])}
-      />
-      <FileIcon
-        name="LexicalAnalyzer.js"
-        type="code"
-        onOpen={() => setOpenedFiles((prev) => [...prev, "LexicalAnalyzer.js"])}
-      />
-      <FileIcon
-        name="Skills.md"
-        type="text"
-        onOpen={() => setOpenedFiles((prev) => [...prev, "Skills.md"])}
-      />
-    </div>
-  ),
-  // you can add other folders here if needed
-};
-
-
-
-const fileContents: Record<string, JSX.Element> = {
-  "Resume.pdf": (
-    <div className="p-4 h-[80vh] flex flex-col gap-4">
-      <iframe
-        src="/resume.pdf"
-        className="w-full flex-1 border rounded-md shadow-sm"
-      />
-      <div className="flex justify-end">
-        <a
-          href="/resume.pdf"
-          download
-          className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-300 transition"
-        >
-          ⬇️ Download
-        </a>
-      </div>
-    </div>
-  ),
-  "Project1.js": <DevsheelPage />,
-  "Project2.js": <ResumeAnalyzerPage />,
-  "Portfolio.png": <TicketAssistantPage />,
-  "LexicalAnalyzer.js": <LexicalAnalyzerPage />,
-  "Skills.md": <SkillsPage />,
-};
-
-
-  // 3️⃣ Rendering Finder UI
+/* Helper component for project cards */
+function ProjectCard({
+  title,
+  description,
+  onOpen,
+}: {
+  title: string;
+  description: string;
+  onOpen: () => void;
+}) {
   return (
-    <div className="absolute inset-0 pointer-events-none z-30">
-      {/* Finder window */}
-      <div className="pointer-events-auto flex justify-center mt-20">
-        <Window title={active} onClose={onClose}>
-          {windows[active]}
-        </Window>
+    <div
+      className="rounded-lg border bg-white dark:bg-zinc-900 shadow-md hover:shadow-lg transition p-6 flex flex-col justify-between"
+    >
+      <div>
+        <h2 className="text-lg font-semibold">{title}</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+          {description}
+        </p>
       </div>
-
-      {/* Multiple file windows */}
-      {openedFiles.map((file, index) => (
-        <div
-          key={file}
-          className="pointer-events-auto flex justify-center"
-          style={{ marginTop: 32 + index * 40, marginLeft: 12 + index * 20 }}
+      <div className="mt-4 flex justify-end">
+        <button
+          onClick={onOpen}
+          className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition"
         >
-          <Window
-            title={file}
-            onClose={() =>
-              setOpenedFiles((prev) => prev.filter((f) => f !== file))
-            }
-          >
-            {fileContents[file]}
-          </Window>
-        </div>
-      ))}
+          Open
+        </button>
+      </div>
     </div>
   );
 }
