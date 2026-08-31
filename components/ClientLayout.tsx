@@ -11,8 +11,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const [active, setActive] = useState<string | null>(null);
 
   return (
-    <div className="relative h-screen w-screen bg-black text-white">
-      {/* Splash always visible at start */}
+    <>
+      {/* Splash renders the background */}
       <Splash />
 
       {/* Menu bar at top */}
@@ -31,6 +31,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
       {/* Dock at bottom */}
       <Dock onOpen={setActive} />
-    </div>
+    </>
   );
 }
