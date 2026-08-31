@@ -1,15 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import { useTheme } from "next-themes";
 
 export default function MenuBar({ onOpen }: { onOpen?: (app: string) => void }) {
   const [open, setOpen] = useState<string | null>(null);
+  const { theme, setTheme } = useTheme();
 
   const menus: Record<string, string[]> = {
     Apple: ["About Me", "Contact"],
     File: ["Download Resume"],
     Edit: ["Toggle Theme"],
     Help: ["Portfolio Guide"],
+  };
+
+  const handleItemClick = (item: string) => {
+    if (item === "Toggle Theme") {
+      setTheme(theme === "dark" ? "light" : "dark");
+    } else {
+      onOpen?.(item);
+    }
+    setOpen(null);
   };
 
   return (
@@ -36,7 +47,7 @@ export default function MenuBar({ onOpen }: { onOpen?: (app: string) => void }) 
                   key={item}
                   role="menuitem"
                   className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-800 cursor-pointer"
-                  onClick={() => onOpen?.(item)}
+                  onClick={() => handleItemClick(item)}
                 >
                   {item}
                 </div>
