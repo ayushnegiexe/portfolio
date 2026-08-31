@@ -24,7 +24,7 @@ const projects = [
 
 export default function ProjectsPage() {
   return (
-    <main className="h-screen bg-gradient-to-br from-gray-100 to-gray-300 dark:from-black dark:to-zinc-900">
+    <main className="h-screen">
       <Window title="Projects">
         <div className="divide-y divide-gray-200">
           {projects.map((proj) => (
