@@ -63,13 +63,15 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <StatusBar />
       </div>
 
-      {active && (
-        <div className="pointer-events-auto flex justify-center mt-20">
-          <Window title={active} onClose={() => setActive(null)}>
-            {sections[active] ?? fileContents[active]}
-          </Window>
-        </div>
-      )}
+     {active && (
+  <div className="pointer-events-auto flex justify-center mt-20">
+    <Window title={active} onClose={() => setActive(null)}>
+      {/* If active is a folder, show its contents */}
+      {sections[active] ?? fileContents[active]}
+    </Window>
+  </div>
+)}
+
 
       {children}
       <Dock onOpen={setActive} />
