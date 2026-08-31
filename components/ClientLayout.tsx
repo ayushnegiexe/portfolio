@@ -6,9 +6,7 @@ import Splash from "@/components/Splash";
 import MenuBar from "@/components/MenuBar";
 import StatusBar from "@/components/StatusBar";
 import Window from "@/components/Window";
-import type {JSX} from "react";
 
-// Import your content pages
 import ResumePage from "@/app/resume/page"; 
 import DevsheelPage from "@/app/projects/devsheel/page";
 import ResumeAnalyzerPage from "@/app/projects/resume-analyzer/page";
@@ -19,7 +17,6 @@ import SkillsPage from "@/app/skills/page";
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [active, setActive] = useState<string | null>(null);
 
-  // Map active keys to content
   const sections: Record<string, JSX.Element> = {
     Resume: <ResumePage />,
     Projects: (
@@ -42,21 +39,12 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <>
-      {/* Background splash */}
       <Splash />
-
-      {/* Top menu bar */}
       <MenuBar onOpen={setActive} />
-
-      {/* Status bar fixed top-right */}
       <div className="fixed top-2 right-4 z-50">
         <StatusBar />
       </div>
 
-      {/* Spotlight search */}
-      <Spotlight />
-
-      {/* Single clean window */}
       {active && (
         <div className="pointer-events-auto flex justify-center mt-20">
           <Window title={active} onClose={() => setActive(null)}>
@@ -65,16 +53,12 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         </div>
       )}
 
-      {/* Page content */}
       {children}
-
-      {/* Dock at bottom */}
       <Dock onOpen={setActive} />
     </>
   );
 }
 
-/* Project Card Helper */
 function ProjectCard({
   title,
   description,
