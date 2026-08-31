@@ -6,13 +6,32 @@ function formatMenuClock(date: Date) {
   const weekday = date.toLocaleDateString("en-GB", { weekday: "short" });
   const day = date.getDate();
   const month = date.toLocaleDateString("en-GB", { month: "short" });
-  const time = date
-    .toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+  const time = date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
   return `${weekday} ${day} ${month}\u00a0\u00a0${time}`;
+}
+
+function BatteryGlyph({ percent }: { percent: number }) {
+  const fillWidth = Math.max(1.2, (percent / 100) * 8.2);
+  return (
+    <svg viewBox="0 0 16 10" className="h-3 w-[18px]" aria-hidden="true">
+      <rect
+        x="0.6"
+        y="1.2"
+        width="12.4"
+        height="7.6"
+        rx="1.4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.1"
+      />
+      <rect x="12.8" y="3.4" width="1.6" height="3.2" rx="0.4" fill="currentColor" />
+      <rect x="1.8" y="2.5" width={fillWidth} height="5" rx="0.6" fill="currentColor" />
+    </svg>
+  );
 }
 
 export default function StatusBar({ onSpotlight }: { onSpotlight?: () => void }) {
@@ -23,6 +42,32 @@ export default function StatusBar({ onSpotlight }: { onSpotlight?: () => void })
     setNow(new Date());
     const tick = window.setInterval(() => setNow(new Date()), 1000);
     return () => window.clearInterval(tick);
+  }, []);
+
+  useEffect(() => {
+    const nav = navigator as Navigator & {
+      getBattery?: () => Promise<{
+        level: number;
+        addEventListener: (type: string, listener: () => void) => void;
+        removeEventListener: (type: string, listener: () => void) => void;
+      }>;
+    };
+    if (!nav.getBattery) {
+      setBattery(100); // fallback if API not supported
+      return;
+    }
+    let batteryRef: Awaited<ReturnType<NonNullable<typeof nav.getBattery>>> | null = null;
+    const sync = () => {
+      if (batteryRef) setBattery(Math.round(batteryRef.level * 100));
+    };
+    nav.getBattery().then((b) => {
+      batteryRef = b;
+      sync();
+      b.addEventListener("levelchange", sync);
+    });
+    return () => {
+      batteryRef?.removeEventListener("levelchange", sync);
+    };
   }, []);
 
   useEffect(() => {
@@ -42,7 +87,24 @@ export default function StatusBar({ onSpotlight }: { onSpotlight?: () => void })
 
   return (
     <div className="ml-auto flex h-7 items-center pr-1 text-[13px] font-medium tracking-tight text-white">
-      {/* other buttons */}
+      <button type="button" className={iconBtn} title="Wi-Fi" aria-label="Wi-Fi">
+        <Wifi className="h-3.5 w-3.5" strokeWidth={2.2} />
+      </button>
+      <button type="button" className={iconBtn} title="Bluetooth" aria-label="Bluetooth">
+        <Bluetooth className="h-3.5 w-3.5" strokeWidth={2.2} />
+      </button>
+      <button
+        type="button"
+        className={`${iconBtn} gap-1`}
+        title={battery != null ? `Battery: ${battery}%` : "Battery"}
+        aria-label={battery != null ? `Battery ${battery} percent` : "Battery"}
+      >
+        <BatteryGlyph percent={battery ?? 80} />
+        <span className="text-[12px] tabular-nums leading-none">{battery ?? 80}%</span>
+      </button>
+      <button type="button" className={iconBtn} title="Sound" aria-label="Sound">
+        <Volume2 className="h-3.5 w-3.5" strokeWidth={2.2} />
+      </button>
       <button
         type="button"
         className={iconBtn}
