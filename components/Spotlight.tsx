@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const options = [
   { label: "Resume", route: "/resume" },
   { label: "Projects", route: "/projects" },
   { label: "Skills", route: "/skills" },
-  { label: "GitHub", route: "https://github.com/ayush", external: true },
-  { label: "LinkedIn", route: "https://linkedin.com/in/ayush", external: true },
+  { label: "GitHub", route: "https://github.com/ayushnegiexe", external: true },
+  { label: "LinkedIn", route: "https://linkedin.com/in/ayush-negi-exe", external: true },
 ];
 
 export default function Spotlight() {
@@ -16,11 +16,25 @@ export default function Spotlight() {
   const [query, setQuery] = useState("");
   const router = useRouter();
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const isSpace = event.code === "Space" || event.key === " ";
+      const isK = event.key.toLowerCase() === "k";
+      if ((event.metaKey || event.ctrlKey) && (isSpace || isK)) {
+        event.preventDefault();
+        setOpen(!open);
+      }
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
   const filtered = options.filter((opt) =>
     opt.label.toLowerCase().includes(query.toLowerCase())
   );
 
-  const handleSelect = (opt: typeof options[number]) => {
+  const handleSelect = (opt: (typeof options)[number]) => {
     if (opt.external) {
       window.open(opt.route, "_blank");
     } else {
